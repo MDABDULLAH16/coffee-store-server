@@ -89,6 +89,7 @@ async function run() {
       res.send(result);
       console.log(user);
     });
+    //user data load for ui
     app.get("/user", async (req, res) => {
       const cursor = userCollection.find();
       const result = await cursor.toArray();
