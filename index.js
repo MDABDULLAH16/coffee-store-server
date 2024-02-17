@@ -95,7 +95,27 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    // dynamic user data load for ui
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const cursor = userCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
+    //update user info
+    app.patch("/user", async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const updatedDoc = {
+        $set: {
+          lastSignInTime: user.lastLoggedAt,
+        },
+      };
+      const result = await userCollection.updateOne(filter, updatedDoc);
+      res.send(result);
+    });
     //delete User from db
     app.delete("/user/:id", async (req, res) => {
       const id = req.params.id;
